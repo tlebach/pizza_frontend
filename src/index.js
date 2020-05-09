@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import Pizza from './Pizza';
 import './index.css';
 
 ReactDOM.render(
-  <App />,
+  <Pizza />,
   document.getElementById('root')
 );

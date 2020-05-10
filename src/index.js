@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Pizza from './Pizza';
+import PizzaList from './components/PizzaList';
 import './index.css';
 
 ReactDOM.render(
-  <Pizza />,
+  <PizzaList   />,
   document.getElementById('root')
 );

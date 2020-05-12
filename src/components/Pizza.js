@@ -2,10 +2,6 @@ import React, {Component} from 'react';
 import _ from 'lodash';
 
 class Pizza extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	changeQuantity = (event) => {
 		this.setState({
 			qty: event.target.value

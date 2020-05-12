@@ -23,18 +23,18 @@ class PizzaList extends React.Component {
 		let order = {id, price , qty};
 		let index = -1;
 		if(this.state.orderList instanceof Array) {
-			index = this.state.orderList.findIndex(x => x.id === id);
+			index = this.state.orderList.findIndex(x => x.id === order.id);
 		}
 		if(index >= 0){
 			this.setState({
-				total: this.state.total + price * (qty - this.state.orderList[index].qty)
+				total: this.state.total + order.price * (qty - this.state.orderList[index].qty)
 			});
-			this.state.orderList[index].qty = qty;
+			this.state.orderList[index].qty = order.qty;
 		}else{
 			this.setState({
-				total: this.state.total + (price * qty)
+				total: this.state.total + (order.price * order.qty)
 			});
-			this.state.orderList.push({id, price , qty});
+			this.state.orderList.push(order);
 		}
 	};
 	

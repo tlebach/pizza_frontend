@@ -4,14 +4,18 @@ class Checkout extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
+		this.state = this.initState();
+	}
+	
+	initState = () => {
+		return{
 			fullname: '',
 			address: '',
 			phone: '',
 			email: '',
 			shippingFee: 2
 		};
-	}
+	};
 
 	handleSubmit = (event) => {
 		event.preventDefault();
@@ -19,9 +23,12 @@ class Checkout extends React.Component {
 		fetch("http://pizza.local/api/orders", {method: "POST", body: JSON.stringify(data)})
 			.then((response) => response.json())
 			.then((responseData) => {
-				console.log(responseData);
+				if(responseData.status){
+					alert(responseData.message);
+					this.setState(this.initState());
+				}
 			})
-			.done();
+			.catch((error) => console.error(error));
 	};
 
 	handleChange = (event) => {
@@ -48,18 +55,18 @@ class Checkout extends React.Component {
 					<span className="col-6 text-right">${totalIncShip}</span> 
 				</div>
 				<div className="row">
-					<form onSubmit={this.handleSubmit} className="col-6">
+					<form onSubmit={this.handleSubmit} className="col-6"  ref={(el) => this.myFormRef = el}>
 						<div className="form-group">
-							<input type="text" className="form-control" value={this.state.fullname} onChange={this.handleChange} name="fullname" placeholder="Fullname" />
+							<input type="text" className="form-control" value={this.state.fullname} onChange={this.handleChange} name="fullname" placeholder="Fullname" required />
 						</div>
 						<div className="form-group">
-							<input type="text" className="form-control" value={this.state.address} onChange={this.handleChange} name="address" placeholder="Address" />
+							<input type="text" className="form-control" value={this.state.address} onChange={this.handleChange} name="address" placeholder="Address" required />
 						</div>
 						<div className="form-group">
-							<input type="text" className="form-control" value={this.state.phone} onChange={this.handleChange} name="phone" placeholder="Phone number" />
+							<input type="text" className="form-control" value={this.state.phone} onChange={this.handleChange} name="phone" placeholder="Phone number" required />
 						</div>
 						<div className="form-group">
-							<input type="text" className="form-control" value={this.state.email} onChange={this.handleChange} name="email" placeholder="Email" />
+							<input type="text" className="form-control" value={this.state.email} onChange={this.handleChange} name="email" placeholder="Email" required />
 						</div>
 						<div className="form-group hidden">
 							<input type="hidden" className="form-control" name="order" value={this.state.order} />

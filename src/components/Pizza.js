@@ -4,17 +4,17 @@ import _ from 'lodash';
 class Pizza extends Component {
 	constructor(props) {
 		super(props);
-		
-		this.state = {
-			qty: 0,
-		};
 	}
 
 	changeQuantity = (event) => {
 		this.setState({
 			qty: event.target.value
 		});
-		this.props.calTotal(this.props.price, event.target.value);
+		this.props.calTotal(
+			this.props.id,
+			this.props.price,
+			event.target.value
+		);
 	};
 
 	render() {
@@ -36,7 +36,7 @@ class Pizza extends Component {
 					{ this.props.content }
 				</td>
 				<td>
-					<select onChange={this.changeQuantity} >
+					<select className="form-control" onChange={this.changeQuantity} >
 						{ _.range(0, 10).map(value => <option key={value} value={value}>{value}</option>) }
 					</select>
 				</td>

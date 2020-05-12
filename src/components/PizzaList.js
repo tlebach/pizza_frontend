@@ -1,36 +1,43 @@
 import React from "react";
 import Pizza from "./Pizza";
-import Total from "./Total";
-import axios from "axios";
+import Checkout from "./Checkout";
 
 class PizzaList extends React.Component {
 	constructor(props) {
-		console.log(props);
 		super(props);
 
 		this.state = {
 			total: 0,
+			orderList: [],
 			pizzaList: ""
 		};
 	}
 
 	componentDidMount() {
-		axios.get('http://pizza.local/pizzas')
-			.then(response => {
-				this.setState({ pizzaList: response.data });
-			})
-			.catch(function (error) {
-				console.log(error);
-			})
+		fetch('http://pizza.local/api/pizzas')
+			.then(response => response.json())
+			.then(data => this.setState({ pizzaList: data }));
 	}
 
-
-	calculateTotal = (price, qty) => {
-		this.setState({
-			total: this.state.total + (price * qty)
-		});
+	calculateTotal = (id, price , qty) => {
+		let order = {id, price , qty};
+		let index = -1;
+		if(this.state.orderList instanceof Array) {
+			index = this.state.orderList.findIndex(x => x.id === id);
+		}
+		if(index >= 0){
+			this.setState({
+				total: this.state.total + price * (qty - this.state.orderList[index].qty)
+			});
+			this.state.orderList[index].qty = qty;
+		}else{
+			this.setState({
+				total: this.state.total + (price * qty)
+			});
+			this.state.orderList.push({id, price , qty});
+		}
 	};
-
+	
 	render() {
 		
 		if(this.state.pizzaList instanceof Array) {
@@ -52,23 +59,23 @@ class PizzaList extends React.Component {
 
 		return (
 			<div>
-				<h1>Pizzas List</h1>
+				<h1>Pizza List</h1>
 				<table className="table table-bordered">
 					<thead>
 					<tr>
 						<td>ID</td>
-						<td>Pizza Title</td>
+						<td>Name</td>
 						<td>Image</td>
 						<td>Price</td>
-						<td>Pizza Content</td>
-						<td>Quantity</td>
+						<td>Content</td>
+						<td width="80px">Quantity</td>
 					</tr>
 					</thead>
 					<tbody>
 						{pizzas}
 					</tbody>
 				</table>
-			<Total total={this.state.total} />
+				<Checkout total={this.state.total} order={this.state.orderList} /><br/>
 			</div>
 		);
 	}
